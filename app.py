@@ -7,14 +7,16 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 
-# Streamlit App Title 
+# Streamlit App Title with improved UI
 st.set_page_config(page_title="Customer Segmentation App", layout="wide")
-st.markdown("""
+st.markdown(
+    """
     <style>
         .main {background-color: #f5f5f5;}
         h1 {color: #4CAF50; text-align: center;}
     </style>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True
+)
 
 st.title("📊 Customer Segmentation using K-Means Clustering")
 st.markdown("---")
@@ -30,7 +32,7 @@ if uploaded_file:
     df = load_data(uploaded_file)
     st.subheader("🔍 Data Preview")
     st.dataframe(df.head())
-    
+
     # Select numerical features
     numeric_features = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
     
@@ -41,11 +43,11 @@ if uploaded_file:
         feature_2 = st.selectbox("🔹 Select second feature", numeric_features, index=1)
     
     selected_features = df[[feature_1, feature_2]]
-    
+
     # Standardize the features
     scaler = StandardScaler()
     scaled_features = scaler.fit_transform(selected_features)
-    
+
     # Determine optimal clusters using Elbow Method
     inertia = []
     K = range(1, 11)
@@ -85,6 +87,18 @@ if uploaded_file:
     ax.set_ylabel(feature_2)
     ax.set_title('Customer Segments')
     st.pyplot(fig)
+    
+    # Cluster Insights
+    st.subheader("📊 Cluster Insights & Interpretation")
+    cluster_descriptions = {
+        0: "🟢 Cluster 0: High-income, high-spending customers - likely premium customers.",
+        1: "🔵 Cluster 1: Low-income, high-spending customers - potential impulsive buyers.",
+        2: "🟠 Cluster 2: High-income, low-spending customers - cautious or investment-focused buyers.",
+        3: "🔴 Cluster 3: Low-income, low-spending customers - budget-conscious customers."
+    }
+
+    for cluster, description in cluster_descriptions.items():
+        st.write(f"**Cluster {cluster}:** {description}")
     
     # Download Results
     st.subheader("📥 Download Clustered Data")
