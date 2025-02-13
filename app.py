@@ -7,7 +7,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 
-# Streamlit App Title with improved UI
+# Streamlit App Title 
 st.set_page_config(page_title="Customer Segmentation App", layout="wide")
 st.markdown("""
     <style>
